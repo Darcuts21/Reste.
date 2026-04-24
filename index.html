@@ -1,196 +1,64 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>RESTE • Architecture Dédiée</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+// --- NOUVEAUX ÉTATS ---
+let userLevel = 1;
+let avatarStyle = 'avataaars'; // Styles possibles: avataaars, bottts, adventurer
+
+// --- LOGIQUE DES NIVEAUX ---
+function calculateLevel() {
+    const myPosts = posts.filter(p => p.author === currentUser);
+    const totalPoints = (myPosts.length * 15) + (myPosts.reduce((acc, p) => acc + p.likes, 0) * 2);
+    userLevel = Math.floor(totalPoints / 50) + 1;
     
-    <style>
-        :root { --accent: #10b981; }
-        body { font-family: 'Outfit', sans-serif; transition: 0.4s; }
-        
-        /* Design "Dédié" : Flous et profondeurs */
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
-        }
-        .dark .glass-panel {
-            background: rgba(15, 15, 15, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
-        }
+    let rank = "Mitron Économe";
+    if(userLevel >= 4) rank = "Sauveur de Restes";
+    if(userLevel >= 8) rank = "Alchimiste du Frigo";
+    if(userLevel >= 13) rank = "Maître RESTE";
+    
+    return { level: userLevel, rank: rank, points: totalPoints };
+}
 
-        /* Animation de l'IA */
-        .ia-gradient {
-            background: linear-gradient(90deg, #10b981, #3b82f6, #10b981);
-            background-size: 200% auto;
-            animation: shine 3s linear infinite;
-        }
-        @keyframes shine { to { background-position: 200% center; } }
-        
-        .tab-content { display: none; }
-        .tab-content.active { display: block; animation: fadeInUp 0.5s ease; }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-    </style>
-</head>
-<body class="bg-zinc-50 dark:bg-[#080808] text-zinc-900 dark:text-zinc-100 pb-28">
+// --- PERSONNALISATION AVATAR ---
+function cycleAvatar() {
+    const styles = ['avataaars', 'bottts', 'adventurer', 'pixel-art'];
+    let currentIndex = styles.indexOf(avatarStyle);
+    avatarStyle = styles[(currentIndex + 1) % styles.length];
+    localStorage.setItem('reste_avatar_style', avatarStyle);
+    updateUI();
+    showToast(`Style d'avatar : ${avatarStyle} ✨`);
+}
 
-    <script type="module">
-        // Le "Moteur" du site : gère les données localement avant de synchroniser
-        const ResteEngine = {
-            user: JSON.parse(localStorage.getItem('reste_user')) || null,
-            posts: JSON.parse(localStorage.getItem('reste_posts')) || [],
+// --- MISE À JOUR DE LA VUE PROFIL ---
+function updateUI() {
+    const stats = calculateLevel();
+    
+    // Avatar avec clic pour changer
+    const avatarUrl = `https://api.dicebear.com/7.x/${avatarStyle}/svg?seed=${currentUser}`;
+    
+    document.getElementById('auth-status').innerHTML = `
+        <div class="avatar-ring" onclick="cycleAvatar()" style="cursor:pointer">
+            <div class="avatar-inner"><img src="${avatarUrl}" width="32" height="32"></div>
+        </div>`;
 
-            saveUser(userData) {
-                this.user = userData;
-                localStorage.setItem('reste_user', JSON.stringify(userData));
-                this.updateUI();
-            },
+    document.getElementById('profile-name').innerHTML = `${currentUser} <span style="font-size:12px; color:var(--accent)">Niv.${stats.level}</span>`;
+    document.getElementById('profile-bio').innerText = `🏆 ${stats.rank}`;
 
-            addPost(recipe, ingredients) {
-                const newPost = {
-                    id: Date.now(),
-                    author: this.user.name,
-                    avatar: this.user.avatar,
-                    recipe,
-                    ingredients,
-                    likes: 0,
-                    date: new Date().toLocaleTimeString()
-                };
-                this.posts.unshift(newPost);
-                localStorage.setItem('reste_posts', JSON.stringify(this.posts));
-                this.renderFeed();
-            },
-
-            updateUI() {
-                const authZone = document.getElementById('auth-zone');
-                if(this.user) {
-                    authZone.innerHTML = `
-                        <div class="flex items-center space-x-3">
-                            <div class="text-right hidden sm:block">
-                                <p class="text-[10px] font-bold uppercase tracking-widest">${this.user.name}</p>
-                                <p class="text-[9px] opacity-50">Chef Niveau 1</p>
-                            </div>
-                            <img src="${this.user.avatar}" class="w-10 h-10 rounded-full border-2 border-emerald-500 p-0.5">
-                        </div>`;
-                    document.getElementById('welcome-name').innerText = this.user.name;
-                    document.getElementById('creator-shell').classList.remove('hidden');
-                    document.getElementById('login-modal').classList.add('hidden');
-                }
-            },
-
-            renderFeed() {
-                const feed = document.getElementById('feed-container');
-                feed.innerHTML = this.posts.map(post => `
-                    <div class="glass-panel rounded-[2rem] p-6 mb-6 animate-fade-in">
-                        <div class="flex items-center space-x-3 mb-4">
-                            <img src="${post.avatar}" class="w-6 h-6 rounded-full">
-                            <span class="text-xs font-semibold opacity-60">${post.author} • ${post.date}</span>
-                        </div>
-                        <h4 class="text-emerald-500 text-[10px] font-bold uppercase tracking-widest mb-2 italic">Ingrédients : ${post.ingredients}</h4>
-                        <div class="text-sm opacity-90 leading-relaxed">${post.recipe}</div>
-                    </div>
-                `).join('');
-            }
-        };
-
-        // Initialisation
-        window.ResteEngine = ResteEngine;
-        window.onload = () => {
-            ResteEngine.updateUI();
-            ResteEngine.renderFeed();
-        };
-
-        // Connexion dédiée (Simulation)
-        window.handleLogin = (e) => {
-            e.preventDefault();
-            const name = document.getElementById('login-name').value;
-            ResteEngine.saveUser({
-                name: name || "Lucien",
-                avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${name}`,
-                points: 0
-            });
-        };
-
-        // Appel IA Dédié
-        window.generateRecipe = async () => {
-            const ing = document.getElementById('main-input').value;
-            if(!ing) return;
-
-            const btn = document.getElementById('gen-btn');
-            btn.classList.add('ia-gradient');
-            btn.innerText = "L'IA analyse tes restes...";
-
-            // Simulation IA (À lier avec ta clé Gemini)
-            setTimeout(() => {
-                const fakeRecipe = `### Gratin Express \n1. Mélange tes ${ing}. \n2. Ajoute un filet d'huile. \n3. Passe au four 10 min.`;
-                ResteEngine.addPost(fakeRecipe, ing);
-                document.getElementById('main-input').value = "";
-                btn.classList.remove('ia-gradient');
-                btn.innerText = "Générer la recette 🪄";
-            }, 2000);
-        };
-    </script>
-
-    <nav class="fixed top-0 w-full z-50 px-6 py-4 flex justify-between items-center glass-panel border-none rounded-none">
-        <h1 class="text-xl font-bold tracking-tighter italic">Reste.</h1>
-        <div id="auth-zone">
-            <button onclick="document.getElementById('login-modal').classList.remove('hidden')" class="text-[10px] font-bold uppercase tracking-widest bg-emerald-500 text-white px-6 py-2 rounded-full">Rejoindre</button>
-        </div>
-    </nav>
-
-    <main class="max-w-xl mx-auto pt-24 px-6">
-        
-        <header class="mb-12">
-            <h2 class="text-4xl font-light tracking-tight">Bonjour, <span id="welcome-name" class="font-bold text-emerald-500">Chef</span>.</h2>
-            <p class="opacity-40 text-xs uppercase tracking-[0.3em] mt-2">Design & Anti-Gaspi</p>
-        </header>
-
-        <section id="creator-shell" class="hidden mb-16">
-            <div class="glass-panel rounded-[3rem] p-8 relative overflow-hidden">
-                <div class="relative z-10">
-                    <p class="text-[10px] font-bold uppercase opacity-30 mb-4 tracking-widest">Nouveau Sauvetage</p>
-                    <input type="text" id="main-input" placeholder="Oignons, pain sec, thon..." 
-                           class="w-full bg-transparent text-2xl font-light outline-none border-b border-black/5 dark:border-white/5 pb-4 mb-6 placeholder:opacity-20">
-                    <button id="gen-btn" onclick="generateRecipe()" 
-                            class="w-full py-4 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-2xl font-bold transition-all active:scale-[0.98]">
-                        Générer la recette 🪄
-                    </button>
-                </div>
+    document.getElementById('profile-avatar').innerHTML = `
+        <div class="avatar-ring" onclick="cycleAvatar()" style="padding:4px; cursor:pointer;">
+            <div class="avatar-inner" style="padding:4px;">
+                <img src="${avatarUrl}" width="80" height="80">
             </div>
-        </section>
+            <div style="position:absolute; bottom:0; right:0; background:var(--accent); color:white; border-radius:50%; width:24px; height:24px; display:flex; align-items:center; justify-content:center; font-size:12px; border:2px solid var(--card-bg)">🔄</div>
+        </div>`;
 
-        <div class="flex items-center space-x-4 mb-8">
-            <h3 class="text-[10px] font-bold uppercase tracking-[0.4em] opacity-30">Le Flux</h3>
-            <div class="h-[1px] flex-1 bg-zinc-200 dark:bg-zinc-800"></div>
-        </div>
+    // Mise à jour des stats
+    document.getElementById('stat-count').innerText = posts.filter(p => p.author === currentUser).length;
+    document.getElementById('stat-likes').innerText = posts.filter(p => p.author === currentUser).reduce((acc, p) => acc + p.likes, 0);
+    document.getElementById('stat-eco').innerText = stats.points;
 
-        <div id="feed-container">
-            </div>
+    renderFeed('posts-feed', posts);
+}
 
-    </main>
-
-    <div id="login-modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-md p-6">
-        <div class="glass-panel w-full max-w-sm rounded-[3rem] p-10 text-center">
-            <h3 class="text-2xl font-bold mb-2">Créer ton profil</h3>
-            <p class="text-xs opacity-50 mb-8 uppercase tracking-widest">Système Reste. ID</p>
-            <form onsubmit="handleLogin(event)" class="space-y-4">
-                <input type="text" id="login-name" required placeholder="Ton nom de Chef" 
-                       class="w-full bg-zinc-100 dark:bg-zinc-800 p-4 rounded-2xl outline-none border-2 border-transparent focus:border-emerald-500 transition-all">
-                <button type="submit" class="w-full bg-emerald-500 text-white py-4 rounded-2xl font-bold">Commencer l'aventure</button>
-            </form>
-        </div>
-    </div>
-
-    <div class="fixed bottom-8 left-1/2 -translate-x-1/2 w-[80%] max-w-xs glass-panel rounded-full p-2 flex justify-around items-center border-none shadow-2xl">
-        <button class="p-3 bg-emerald-500 text-white rounded-full"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12.97 2.59a1.5 1.5 0 00-1.94 0l-7.5 6.363A1.5 1.5 0 003 10.097V19.5A1.5 1.5 0 004.5 21h4.75a.75.75 0 00.75-.75V14h4v6.25c0 .414.336.75.75.75h4.75a1.5 1.5 0 001.5-1.5v-9.403a1.5 1.5 0 00-.53-1.144l-7.5-6.363z"></path></svg></button>
-        <button class="p-3 opacity-20"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg></button>
-        <button onclick="document.documentElement.classList.toggle('dark')" class="p-3 opacity-20"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg></button>
-    </div>
-
-</body>
-</html>
+// Ajoute cet événement au chargement
+document.addEventListener('DOMContentLoaded', () => {
+    avatarStyle = localStorage.getItem('reste_avatar_style') || 'avataaars';
+    // ... reste de ton init
+});
