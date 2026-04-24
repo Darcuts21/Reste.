@@ -1,64 +1,12 @@
-// --- NOUVEAUX ÉTATS ---
-let userLevel = 1;
-let avatarStyle = 'avataaars'; // Styles possibles: avataaars, bottts, adventurer
+<div class="bento-card">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <span id="level-name" style="font-weight:bold; color:var(--accent);">Mitron</span>
+        <span id="xp-text" style="font-size:12px; opacity:0.6;">0 / 100 XP</span>
+    </div>
+    <div style="width:100%; height:8px; background:var(--card-border); border-radius:10px; overflow:hidden;">
+        <div id="xp-progress" style="width:0%; height:100%; background:var(--accent); transition:0.5s;"></div>
+    </div>
+</div>
 
-// --- LOGIQUE DES NIVEAUX ---
-function calculateLevel() {
-    const myPosts = posts.filter(p => p.author === currentUser);
-    const totalPoints = (myPosts.length * 15) + (myPosts.reduce((acc, p) => acc + p.likes, 0) * 2);
-    userLevel = Math.floor(totalPoints / 50) + 1;
-    
-    let rank = "Mitron Économe";
-    if(userLevel >= 4) rank = "Sauveur de Restes";
-    if(userLevel >= 8) rank = "Alchimiste du Frigo";
-    if(userLevel >= 13) rank = "Maître RESTE";
-    
-    return { level: userLevel, rank: rank, points: totalPoints };
-}
-
-// --- PERSONNALISATION AVATAR ---
-function cycleAvatar() {
-    const styles = ['avataaars', 'bottts', 'adventurer', 'pixel-art'];
-    let currentIndex = styles.indexOf(avatarStyle);
-    avatarStyle = styles[(currentIndex + 1) % styles.length];
-    localStorage.setItem('reste_avatar_style', avatarStyle);
-    updateUI();
-    showToast(`Style d'avatar : ${avatarStyle} ✨`);
-}
-
-// --- MISE À JOUR DE LA VUE PROFIL ---
-function updateUI() {
-    const stats = calculateLevel();
-    
-    // Avatar avec clic pour changer
-    const avatarUrl = `https://api.dicebear.com/7.x/${avatarStyle}/svg?seed=${currentUser}`;
-    
-    document.getElementById('auth-status').innerHTML = `
-        <div class="avatar-ring" onclick="cycleAvatar()" style="cursor:pointer">
-            <div class="avatar-inner"><img src="${avatarUrl}" width="32" height="32"></div>
-        </div>`;
-
-    document.getElementById('profile-name').innerHTML = `${currentUser} <span style="font-size:12px; color:var(--accent)">Niv.${stats.level}</span>`;
-    document.getElementById('profile-bio').innerText = `🏆 ${stats.rank}`;
-
-    document.getElementById('profile-avatar').innerHTML = `
-        <div class="avatar-ring" onclick="cycleAvatar()" style="padding:4px; cursor:pointer;">
-            <div class="avatar-inner" style="padding:4px;">
-                <img src="${avatarUrl}" width="80" height="80">
-            </div>
-            <div style="position:absolute; bottom:0; right:0; background:var(--accent); color:white; border-radius:50%; width:24px; height:24px; display:flex; align-items:center; justify-content:center; font-size:12px; border:2px solid var(--card-bg)">🔄</div>
-        </div>`;
-
-    // Mise à jour des stats
-    document.getElementById('stat-count').innerText = posts.filter(p => p.author === currentUser).length;
-    document.getElementById('stat-likes').innerText = posts.filter(p => p.author === currentUser).reduce((acc, p) => acc + p.likes, 0);
-    document.getElementById('stat-eco').innerText = stats.points;
-
-    renderFeed('posts-feed', posts);
-}
-
-// Ajoute cet événement au chargement
-document.addEventListener('DOMContentLoaded', () => {
-    avatarStyle = localStorage.getItem('reste_avatar_style') || 'avataaars';
-    // ... reste de ton init
-});
+<div class="bento-card" id="avatar-selection">
+    </div>
