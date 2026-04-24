@@ -6,9 +6,10 @@
     j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
     })(window,document,'script','dataLayer','GTM-NX6JWZPV');</script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Reste.</title>
+    <title>Reste. (Local)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     
@@ -40,26 +41,17 @@
         }
 
         .scroll-hide::-webkit-scrollbar { display: none; }
-
-        /* Animation de suppression "Haptique" */
-        .post-delete { animation: shake 0.4s ease-in-out; opacity: 0.5; }
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-4px); }
-            75% { transform: translateX(4px); }
-        }
     </style>
 </head>
 <body class="pb-36">
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NX6JWZPV"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NX6JWZPV" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
     <nav class="fixed top-0 w-full z-50 px-8 py-5 flex justify-between items-center bg-white/80 backdrop-blur-xl border-b border-slate-100">
         <span class="text-2xl font-extrabold tracking-tighter italic uppercase text-slate-900">Reste<span class="text-emerald-500">.</span></span>
         <div id="auth-status"></div>
     </nav>
 
     <main class="max-w-xl mx-auto px-6 pt-28">
-        
         <section id="tab-explore" class="tab-content active space-y-8">
             <header class="flex justify-between items-end">
                 <h2 class="text-4xl font-extrabold tracking-tight text-slate-900">Cuisinez vos <span class="text-emerald-500">restes.</span></h2>
@@ -79,8 +71,8 @@
             </div>
 
             <div class="relative group">
-                <input type="text" id="search-input" placeholder="Rechercher une recette ou un Chef..." class="w-full pl-12 bg-white border-slate-200 shadow-sm">
-                <svg class="w-5 h-5 absolute left-4 top-4 text-slate-300 group-focus-within:text-emerald-500 transition-colors" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                <input type="text" id="search-input" placeholder="Rechercher une recette ou un Chef..." class="w-full pl-12 bg-white border-slate-200">
+                <svg class="w-5 h-5 absolute left-4 top-4 text-slate-300" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
             </div>
 
             <div id="posts-feed" class="space-y-4 pb-10"></div>
@@ -109,10 +101,8 @@
                 <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 px-2">Styles d'avatar</p>
                 <div id="avatar-selection" class="flex gap-3 overflow-x-auto pb-2 scroll-hide"></div>
             </div>
-
-            <div id="my-posts-feed" class="space-y-4 pt-6 border-t border-slate-100"></div>
             
-            <button id="logout-btn" class="w-full py-6 text-slate-300 font-bold text-[10px] uppercase tracking-widest hover:text-red-500 transition-colors">DÉCONNEXION</button>
+            <button id="logout-btn" class="w-full py-6 text-slate-300 font-bold text-[10px] uppercase tracking-widest hover:text-red-500">RÉINITIALISER</button>
         </section>
     </main>
 
@@ -130,28 +120,12 @@
     <div id="login-modal" class="fixed inset-0 z-[100] bg-white flex items-center justify-center p-8 hidden">
         <div class="w-full max-w-sm text-center">
             <h3 class="text-5xl font-black mb-8 italic uppercase tracking-tighter text-slate-900">Reste<span class="text-emerald-500">.</span></h3>
-            <input type="text" id="user-name-input" placeholder="Ton pseudo" class="w-full bg-slate-100 p-6 rounded-[2rem] text-center font-bold text-xl text-slate-900 mb-4 outline-none border-2 border-transparent focus:border-emerald-500 transition-all">
-            <button id="login-btn" class="w-full btn-primary shadow-xl">Rejoindre la cuisine</button>
+            <input type="text" id="user-name-input" placeholder="Ton pseudo" class="w-full bg-slate-100 p-6 rounded-[2rem] text-center font-bold text-xl text-slate-900 mb-4 outline-none focus:border-emerald-500 border-2 border-transparent transition-all">
+            <button id="login-btn" class="w-full btn-primary shadow-xl">Commencer</button>
         </div>
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, doc, setDoc, getDoc, updateDoc, collection, query, orderBy, onSnapshot, addDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyAx8-qibToAur16FIWLd_Yc9HXQlwJoe3A",
-            authDomain: "reste-95f7b.firebaseapp.com",
-            projectId: "reste-95f7b",
-            storageBucket: "reste-95f7b.firebasestorage.app",
-            messagingSenderId: "667568129281",
-            appId: "1:667568129281:web:654983ebc9db3f5e5d4700",
-            measurementId: "G-HW49R782RD"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-
+    <script>
         const LEVELS = [
             { min: 0, name: "Mitron", style: "avataaars" },
             { min: 100, name: "Commis", style: "bottts" },
@@ -159,144 +133,121 @@
             { min: 500, name: "Maître", style: "lorelei" }
         ];
 
-        window.allPosts = [];
-        window.userXP = 0;
-        window.userStyle = 'avataaars';
-        const currentUser = localStorage.getItem('reste_user');
-
-        if (!currentUser) {
-            document.getElementById('login-modal').classList.remove('hidden');
-        } else {
-            document.getElementById('login-modal').classList.add('hidden');
-            initApp();
-        }
-
-        async function initApp() {
-            onSnapshot(doc(db, "users", currentUser), (snap) => {
-                if(snap.exists()) {
-                    const data = snap.data();
-                    window.userXP = data.xp || 0;
-                    window.userStyle = data.style || 'avataaars';
-                    updateUserUI(data);
-                    renderAvatarEditor();
-                } else {
-                    setDoc(doc(db, "users", currentUser), { name: currentUser, xp: 0, style: 'avataaars' });
-                }
-            });
-
-            const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
-            onSnapshot(q, (snapshot) => {
-                window.allPosts = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
-                applyFilters();
-            });
-        }
-
-        document.getElementById('login-btn').onclick = async () => {
-            const btn = document.getElementById('login-btn');
-            const name = document.getElementById('user-name-input').value.trim();
-            if(!name) return;
-            btn.disabled = true;
-            try {
-                const userRef = doc(db, "users", name);
-                const userSnap = await getDoc(userRef);
-                if (!userSnap.exists()) await setDoc(userRef, { name, xp: 0, style: 'avataaars' });
-                localStorage.setItem('reste_user', name);
-                location.reload();
-            } catch (e) {
-                alert("Erreur Firebase : Vérifie que tu as publié les règles 'allow read, write: if true;' !");
-                btn.disabled = false;
-            }
+        let state = JSON.parse(localStorage.getItem('reste_state')) || {
+            user: null,
+            xp: 0,
+            style: 'avataaars',
+            posts: []
         };
 
-        document.getElementById('ia-btn').onclick = async () => {
+        if (!state.user) document.getElementById('login-modal').classList.remove('hidden');
+        else initApp();
+
+        function save() { localStorage.setItem('reste_state', JSON.stringify(state)); }
+
+        function initApp() {
+            updateUI();
+            applyFilters();
+            renderAvatarEditor();
+        }
+
+        document.getElementById('login-btn').onclick = () => {
+            const name = document.getElementById('user-name-input').value.trim();
+            if(!name) return;
+            state.user = name;
+            save();
+            location.reload();
+        };
+
+        document.getElementById('ia-btn').onclick = () => {
             const input = document.getElementById('ing-input');
-            const btn = document.getElementById('ia-btn');
-            if(!input.value.trim() || btn.disabled) return;
-            btn.disabled = true;
-            try {
-                await addDoc(collection(db, "posts"), {
-                    author: currentUser,
-                    content: `Chef ${currentUser} : ${input.value}. Recette anti-gaspi validée !`,
-                    style: window.userStyle,
-                    createdAt: serverTimestamp()
-                });
-                await updateDoc(doc(db, "users", currentUser), { xp: window.userXP + 25 });
-                input.value = '';
-                showToast("+25 XP !");
-            } finally { btn.disabled = false; }
+            if(!input.value.trim()) return;
+            const newPost = {
+                id: Date.now(),
+                author: state.user,
+                content: `Chef ${state.user} : ${input.value}. Recette générée !`,
+                style: state.style,
+                createdAt: new Date().toISOString()
+            };
+            state.posts.unshift(newPost);
+            state.xp += 25;
+            save();
+            input.value = '';
+            showToast("+25 XP !");
+            updateUI();
+            applyFilters();
         };
 
         function applyFilters() {
-            const searchTerm = document.getElementById('search-input').value.toLowerCase();
-            const sortMode = document.getElementById('sort-filter').value;
-            let filtered = window.allPosts.filter(p => (p.content||"").toLowerCase().includes(searchTerm) || (p.author||"").toLowerCase().includes(searchTerm));
-            if(sortMode === 'random') filtered = filtered.sort(() => Math.random() - 0.5);
-            renderFeed('posts-feed', filtered);
-            renderFeed('my-posts-feed', filtered.filter(p => p.author === currentUser));
-        }
-
-        document.getElementById('search-input').oninput = applyFilters;
-        document.getElementById('sort-filter').onchange = applyFilters;
-
-        window.deletePost = async (id) => { 
-            if(confirm("Supprimer ?")) {
-                const el = document.querySelector(`[data-id="${id}"]`);
-                if(el) el.classList.add('post-delete');
-                setTimeout(async () => {
-                    await deleteDoc(doc(db, "posts", id));
-                }, 400);
+            const search = document.getElementById('search-input').value.toLowerCase();
+            const sort = document.getElementById('sort-filter').value;
+            let filtered = [...state.posts].filter(p => p.content.toLowerCase().includes(search) || p.author.toLowerCase().includes(search));
+            if(sort === 'random') filtered.sort(() => Math.random() - 0.5);
+            
+            const feed = document.getElementById('posts-feed');
+            if(filtered.length === 0) {
+                feed.innerHTML = `<p class="text-center py-10 text-xs font-bold text-slate-300 uppercase">Aucune recette</p>`;
+                return;
             }
-        };
-
-        window.changeAvatarStyle = async (ns) => { await updateDoc(doc(db, "users", currentUser), { style: ns }); };
-
-        function updateUserUI(data) {
-            const info = [...LEVELS].reverse().find(l => (data.xp || 0) >= l.min);
-            const next = LEVELS.find(l => l.min > (data.xp || 0)) || { min: (data.xp || 0) + 100 };
-            const progress = (((data.xp || 0) - info.min) / (next.min - info.min)) * 100;
-            const url = `https://api.dicebear.com/7.x/${data.style}/svg?seed=${currentUser}`;
-            document.getElementById('auth-status').innerHTML = `<img src="${url}" class="w-8 h-8 rounded-lg bg-slate-100 border border-slate-200">`;
-            document.getElementById('profile-name').innerText = data.name;
-            document.getElementById('profile-avatar').innerHTML = `<img src="${url}" class="w-24 h-24 rounded-[2rem] bg-white p-1 border border-slate-200 shadow-lg">`;
-            document.getElementById('level-name').innerText = info.name;
-            document.getElementById('xp-fill').style.width = `${progress}%`;
-            document.getElementById('xp-text').innerText = `${data.xp || 0} / ${next.min} XP`;
-        }
-
-        function renderFeed(id, data) {
-            const container = document.getElementById(id);
-            if(data.length === 0) { container.innerHTML = `<p class="text-center py-10 text-xs font-bold text-slate-300 uppercase">Aucune recette trouvée</p>`; return; }
-            container.innerHTML = data.map(post => `
-                <div class="card-white" data-id="${post.id}">
+            feed.innerHTML = filtered.map(post => `
+                <div class="card-white">
                     <div class="flex justify-between items-center mb-4">
                         <div class="flex items-center gap-3">
-                            <img src="https://api.dicebear.com/7.x/${post.style || 'avataaars'}/svg?seed=${post.author}" class="w-8 h-8 rounded-lg bg-slate-50 border border-slate-100">
+                            <img src="https://api.dicebear.com/7.x/${post.style}/svg?seed=${post.author}" class="w-8 h-8 rounded-lg bg-slate-50 border border-slate-100">
                             <span class="text-xs font-bold text-slate-800">${post.author}</span>
                         </div>
-                        ${post.author === currentUser ? `<button onclick="deletePost('${post.id}')" class="text-slate-300 hover:text-red-500 transition-colors p-2">🗑️</button>` : ''}
+                        <button onclick="deletePost(${post.id})" class="text-slate-300 hover:text-red-500 transition-colors p-2">🗑️</button>
                     </div>
                     <p class="text-sm text-slate-600 leading-relaxed font-medium">${post.content}</p>
                 </div>
             `).join('');
         }
 
+        window.deletePost = (id) => {
+            if(!confirm("Supprimer ?")) return;
+            state.posts = state.posts.filter(p => p.id !== id);
+            save();
+            applyFilters();
+        };
+
+        window.changeAvatarStyle = (s) => {
+            state.style = s;
+            save();
+            updateUI();
+            renderAvatarEditor();
+        };
+
+        function updateUI() {
+            const info = [...LEVELS].reverse().find(l => state.xp >= l.min);
+            const next = LEVELS.find(l => l.min > state.xp) || { min: state.xp + 100 };
+            const progress = ((state.xp - info.min) / (next.min - info.min)) * 100;
+            const url = `https://api.dicebear.com/7.x/${state.style}/svg?seed=${state.user}`;
+            
+            document.getElementById('auth-status').innerHTML = `<img src="${url}" class="w-8 h-8 rounded-lg bg-slate-100 border border-slate-200">`;
+            document.getElementById('profile-name').innerText = state.user;
+            document.getElementById('profile-avatar').innerHTML = `<img src="${url}" class="w-24 h-24 rounded-[2rem] bg-white p-1 border border-slate-200 shadow-lg">`;
+            document.getElementById('level-name').innerText = info.name;
+            document.getElementById('xp-fill').style.width = `${progress}%`;
+            document.getElementById('xp-text').innerText = `${state.xp} / ${next.min} XP`;
+        }
+
         function renderAvatarEditor() {
             let html = '';
             LEVELS.forEach(level => {
-                const isLocked = window.userXP < level.min;
+                const isLocked = state.xp < level.min;
                 html += `<div onclick="${isLocked ? '' : `window.changeAvatarStyle('${level.style}')`}" class="flex-shrink-0 cursor-pointer">
-                    <img src="https://api.dicebear.com/7.x/${level.style}/svg?seed=${currentUser}" class="w-16 h-16 rounded-2xl bg-white p-1 border-2 ${window.userStyle === level.style ? 'border-emerald-500' : 'border-slate-100'} ${isLocked ? 'grayscale opacity-20' : ''}">
+                    <img src="https://api.dicebear.com/7.x/${level.style}/svg?seed=${state.user}" class="w-16 h-16 rounded-2xl bg-white p-1 border-2 ${state.style === level.style ? 'border-emerald-500' : 'border-slate-100'} ${isLocked ? 'grayscale opacity-20' : ''}">
                 </div>`;
             });
             document.getElementById('avatar-selection').innerHTML = html;
         }
 
-        window.switchTab = (tabId) => {
-            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-            document.getElementById(`tab-${tabId}`).classList.add('active');
+        window.switchTab = (t) => {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.getElementById(`tab-${t}`).classList.add('active');
             const exploreBtn = document.getElementById('nav-explore');
             const profileBtn = document.getElementById('nav-profile');
-            if(tabId === 'explore') {
+            if(t === 'explore') {
                 exploreBtn.className = "w-32 py-4 rounded-full bg-emerald-500 text-white flex justify-center shadow-lg transition-all";
                 profileBtn.className = "w-32 py-4 rounded-full text-slate-300 flex justify-center transition-all";
             } else {
@@ -307,11 +258,13 @@
 
         function showToast(m) { 
             const t = document.getElementById('share-toast'); t.innerText = m; 
-            t.className = "fixed bottom-32 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-6 py-3 rounded-full font-bold text-xs uppercase z-[100] shadow-xl"; 
+            t.className = "fixed bottom-32 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-6 py-3 rounded-full font-bold text-xs uppercase z-[100]"; 
             setTimeout(() => t.className = "hidden", 2000); 
         }
 
-        document.getElementById('logout-btn').onclick = () => { if(confirm("Se déconnecter ?")) { localStorage.clear(); location.reload(); }};
+        document.getElementById('search-input').oninput = applyFilters;
+        document.getElementById('sort-filter').onchange = applyFilters;
+        document.getElementById('logout-btn').onclick = () => { if(confirm("Tout effacer ?")) { localStorage.clear(); location.reload(); }};
     </script>
 </body>
 </html>
