@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-NX6JWZPV');</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Reste.</title>
@@ -11,11 +16,10 @@
         :root { --accent: #10b981; }
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
-            background-color: #f8f9fa; /* Fond gris très clair pour reposer l'œil */
+            background-color: #f8f9fa;
             @apply text-slate-900 antialiased min-h-screen overflow-x-hidden; 
         }
 
-        /* Cartes Blanches sur fond gris clair */
         .card-white {
             background: #ffffff;
             border: 1px solid rgba(0, 0, 0, 0.05);
@@ -27,21 +31,28 @@
         .tab-content.active { display: block; animation: fadeIn 0.3s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Bouton Émeraude sur Blanc */
         .btn-primary {
             @apply bg-emerald-500 text-white py-5 rounded-[1.8rem] font-extrabold text-sm uppercase tracking-tighter transition-all active:scale-95 disabled:opacity-50 shadow-md shadow-emerald-500/10 hover:bg-emerald-600;
         }
 
-        /* Inputs clairs et nets */
         #ing-input, #search-input {
             @apply bg-slate-100 p-4 rounded-2xl border border-transparent focus:border-emerald-500 focus:bg-white transition-all outline-none text-slate-900 placeholder:text-slate-400;
         }
 
         .scroll-hide::-webkit-scrollbar { display: none; }
+
+        /* Animation de suppression "Haptique" */
+        .post-delete { animation: shake 0.4s ease-in-out; opacity: 0.5; }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-4px); }
+            75% { transform: translateX(4px); }
+        }
     </style>
 </head>
 <body class="pb-36">
-
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NX6JWZPV"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <nav class="fixed top-0 w-full z-50 px-8 py-5 flex justify-between items-center bg-white/80 backdrop-blur-xl border-b border-slate-100">
         <span class="text-2xl font-extrabold tracking-tighter italic uppercase text-slate-900">Reste<span class="text-emerald-500">.</span></span>
         <div id="auth-status"></div>
@@ -53,7 +64,7 @@
             <header class="flex justify-between items-end">
                 <h2 class="text-4xl font-extrabold tracking-tight text-slate-900">Cuisinez vos <span class="text-emerald-500">restes.</span></h2>
                 <div class="flex flex-col items-end">
-                    <span class="text-[8px] font-black opacity-30 uppercase mb-1">Trier par</span>
+                    <span class="text-[8px] font-black opacity-30 uppercase mb-1 text-slate-400">Trier par</span>
                     <select id="sort-filter" class="bg-transparent text-[10px] font-bold text-emerald-600 outline-none cursor-pointer">
                         <option value="recent">RÉCENTS</option>
                         <option value="random">MÉLANGE</option>
@@ -68,8 +79,8 @@
             </div>
 
             <div class="relative group">
-                <input type="text" id="search-input" placeholder="Rechercher une recette ou un Chef..." class="w-full pl-12 bg-white border-slate-200">
-                <svg class="w-5 h-5 absolute left-4 top-4.5 text-slate-300 group-focus-within:text-emerald-500 transition-colors" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                <input type="text" id="search-input" placeholder="Rechercher une recette ou un Chef..." class="w-full pl-12 bg-white border-slate-200 shadow-sm">
+                <svg class="w-5 h-5 absolute left-4 top-4 text-slate-300 group-focus-within:text-emerald-500 transition-colors" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
             </div>
 
             <div id="posts-feed" class="space-y-4 pb-10"></div>
@@ -106,7 +117,7 @@
     </main>
 
     <nav class="fixed bottom-8 left-1/2 -translate-x-1/2 w-[280px] bg-white p-2 rounded-full flex justify-between z-50 shadow-2xl border border-slate-100">
-        <button onclick="window.switchTab('explore')" id="nav-explore" class="w-32 py-4 rounded-full bg-emerald-500 text-white flex justify-center transition-all shadow-lg">
+        <button onclick="window.switchTab('explore')" id="nav-explore" class="w-32 py-4 rounded-full bg-emerald-500 text-white flex justify-center shadow-lg transition-all">
             <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12.97 2.59a1.5 1.5 0 00-1.94 0l-7.5 6.363A1.5 1.5 0 003 10.097V19.5A1.5 1.5 0 004.5 21h4.75a.75.75 0 00.75-.75V14h4v6.25c0 .414.336.75.75.75h4.75a1.5 1.5 0 001.5-1.5v-9.403a1.5 1.5 0 00-.53-1.144l-7.5-6.363z"></path></svg>
         </button>
         <button onclick="window.switchTab('profile')" id="nav-profile" class="w-32 py-4 rounded-full text-slate-300 flex justify-center transition-all">
@@ -119,8 +130,8 @@
     <div id="login-modal" class="fixed inset-0 z-[100] bg-white flex items-center justify-center p-8 hidden">
         <div class="w-full max-w-sm text-center">
             <h3 class="text-5xl font-black mb-8 italic uppercase tracking-tighter text-slate-900">Reste<span class="text-emerald-500">.</span></h3>
-            <input type="text" id="user-name-input" placeholder="Ton pseudo" class="w-full bg-slate-100 p-6 rounded-[2rem] border-transparent outline-none text-center font-bold text-xl text-slate-900 mb-4 focus:bg-white focus:border-emerald-500 transition-all">
-            <button id="login-btn" class="w-full bg-emerald-500 text-white py-6 rounded-[2rem] font-black uppercase tracking-tighter shadow-xl shadow-emerald-500/20">C'est parti</button>
+            <input type="text" id="user-name-input" placeholder="Ton pseudo" class="w-full bg-slate-100 p-6 rounded-[2rem] text-center font-bold text-xl text-slate-900 mb-4 outline-none border-2 border-transparent focus:border-emerald-500 transition-all">
+            <button id="login-btn" class="w-full btn-primary shadow-xl">Rejoindre la cuisine</button>
         </div>
     </div>
 
@@ -128,7 +139,6 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getFirestore, doc, setDoc, getDoc, updateDoc, collection, query, orderBy, onSnapshot, addDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // TA CONFIGURATION FIREBASE
         const firebaseConfig = {
             apiKey: "AIzaSyAx8-qibToAur16FIWLd_Yc9HXQlwJoe3A",
             authDomain: "reste-95f7b.firebaseapp.com",
@@ -154,8 +164,12 @@
         window.userStyle = 'avataaars';
         const currentUser = localStorage.getItem('reste_user');
 
-        if (!currentUser) document.getElementById('login-modal').classList.remove('hidden');
-        else initApp();
+        if (!currentUser) {
+            document.getElementById('login-modal').classList.remove('hidden');
+        } else {
+            document.getElementById('login-modal').classList.add('hidden');
+            initApp();
+        }
 
         async function initApp() {
             onSnapshot(doc(db, "users", currentUser), (snap) => {
@@ -165,6 +179,8 @@
                     window.userStyle = data.style || 'avataaars';
                     updateUserUI(data);
                     renderAvatarEditor();
+                } else {
+                    setDoc(doc(db, "users", currentUser), { name: currentUser, xp: 0, style: 'avataaars' });
                 }
             });
 
@@ -175,10 +191,45 @@
             });
         }
 
+        document.getElementById('login-btn').onclick = async () => {
+            const btn = document.getElementById('login-btn');
+            const name = document.getElementById('user-name-input').value.trim();
+            if(!name) return;
+            btn.disabled = true;
+            try {
+                const userRef = doc(db, "users", name);
+                const userSnap = await getDoc(userRef);
+                if (!userSnap.exists()) await setDoc(userRef, { name, xp: 0, style: 'avataaars' });
+                localStorage.setItem('reste_user', name);
+                location.reload();
+            } catch (e) {
+                alert("Erreur Firebase : Vérifie que tu as publié les règles 'allow read, write: if true;' !");
+                btn.disabled = false;
+            }
+        };
+
+        document.getElementById('ia-btn').onclick = async () => {
+            const input = document.getElementById('ing-input');
+            const btn = document.getElementById('ia-btn');
+            if(!input.value.trim() || btn.disabled) return;
+            btn.disabled = true;
+            try {
+                await addDoc(collection(db, "posts"), {
+                    author: currentUser,
+                    content: `Chef ${currentUser} : ${input.value}. Recette anti-gaspi validée !`,
+                    style: window.userStyle,
+                    createdAt: serverTimestamp()
+                });
+                await updateDoc(doc(db, "users", currentUser), { xp: window.userXP + 25 });
+                input.value = '';
+                showToast("+25 XP !");
+            } finally { btn.disabled = false; }
+        };
+
         function applyFilters() {
             const searchTerm = document.getElementById('search-input').value.toLowerCase();
             const sortMode = document.getElementById('sort-filter').value;
-            let filtered = window.allPosts.filter(p => p.content.toLowerCase().includes(searchTerm) || p.author.toLowerCase().includes(searchTerm));
+            let filtered = window.allPosts.filter(p => (p.content||"").toLowerCase().includes(searchTerm) || (p.author||"").toLowerCase().includes(searchTerm));
             if(sortMode === 'random') filtered = filtered.sort(() => Math.random() - 0.5);
             renderFeed('posts-feed', filtered);
             renderFeed('my-posts-feed', filtered.filter(p => p.author === currentUser));
@@ -187,40 +238,17 @@
         document.getElementById('search-input').oninput = applyFilters;
         document.getElementById('sort-filter').onchange = applyFilters;
 
-        document.getElementById('login-btn').onclick = async () => {
-            const name = document.getElementById('user-name-input').value.trim();
-            if(!name) return;
-            const userRef = doc(db, "users", name);
-            const userSnap = await getDoc(userRef);
-            if (!userSnap.exists()) await setDoc(userRef, { name, xp: 0, style: 'avataaars' });
-            localStorage.setItem('reste_user', name);
-            location.reload();
+        window.deletePost = async (id) => { 
+            if(confirm("Supprimer ?")) {
+                const el = document.querySelector(`[data-id="${id}"]`);
+                if(el) el.classList.add('post-delete');
+                setTimeout(async () => {
+                    await deleteDoc(doc(db, "posts", id));
+                }, 400);
+            }
         };
 
-        document.getElementById('ia-btn').onclick = async () => {
-            const input = document.getElementById('ing-input');
-            const btn = document.getElementById('ia-btn');
-            if(!input.value.trim() || btn.disabled) return;
-            btn.disabled = true;
-            await addDoc(collection(db, "posts"), {
-                author: currentUser,
-                content: `Chef ${currentUser} : ${input.value}. Une création express équilibrée.`,
-                style: window.userStyle,
-                createdAt: serverTimestamp()
-            });
-            await updateDoc(doc(db, "users", currentUser), { xp: window.userXP + 25 });
-            input.value = '';
-            btn.disabled = false;
-            showToast("+25 XP !");
-        };
-
-        window.deletePost = async (id) => {
-            if(confirm("Supprimer cette recette ?")) await deleteDoc(doc(db, "posts", id));
-        };
-
-        window.changeAvatarStyle = async (newStyle) => {
-            await updateDoc(doc(db, "users", currentUser), { style: newStyle });
-        };
+        window.changeAvatarStyle = async (ns) => { await updateDoc(doc(db, "users", currentUser), { style: ns }); };
 
         function updateUserUI(data) {
             const info = [...LEVELS].reverse().find(l => (data.xp || 0) >= l.min);
@@ -229,7 +257,7 @@
             const url = `https://api.dicebear.com/7.x/${data.style}/svg?seed=${currentUser}`;
             document.getElementById('auth-status').innerHTML = `<img src="${url}" class="w-8 h-8 rounded-lg bg-slate-100 border border-slate-200">`;
             document.getElementById('profile-name').innerText = data.name;
-            document.getElementById('profile-avatar').innerHTML = `<img src="${url}" class="w-24 h-24 rounded-[2.5rem] bg-white p-1 border border-slate-200 shadow-lg">`;
+            document.getElementById('profile-avatar').innerHTML = `<img src="${url}" class="w-24 h-24 rounded-[2rem] bg-white p-1 border border-slate-200 shadow-lg">`;
             document.getElementById('level-name').innerText = info.name;
             document.getElementById('xp-fill').style.width = `${progress}%`;
             document.getElementById('xp-text').innerText = `${data.xp || 0} / ${next.min} XP`;
@@ -237,18 +265,15 @@
 
         function renderFeed(id, data) {
             const container = document.getElementById(id);
-            if(data.length === 0) {
-                container.innerHTML = `<p class="text-center opacity-40 py-10 text-xs font-bold uppercase tracking-widest text-slate-400">Rien à l'horizon</p>`;
-                return;
-            }
+            if(data.length === 0) { container.innerHTML = `<p class="text-center py-10 text-xs font-bold text-slate-300 uppercase">Aucune recette trouvée</p>`; return; }
             container.innerHTML = data.map(post => `
-                <div class="card-white">
+                <div class="card-white" data-id="${post.id}">
                     <div class="flex justify-between items-center mb-4">
                         <div class="flex items-center gap-3">
                             <img src="https://api.dicebear.com/7.x/${post.style || 'avataaars'}/svg?seed=${post.author}" class="w-8 h-8 rounded-lg bg-slate-50 border border-slate-100">
                             <span class="text-xs font-bold text-slate-800">${post.author}</span>
                         </div>
-                        ${post.author === currentUser ? `<button onclick="deletePost('${post.id}')" class="text-slate-300 hover:text-red-500 p-2 transition-colors">🗑️</button>` : ''}
+                        ${post.author === currentUser ? `<button onclick="deletePost('${post.id}')" class="text-slate-300 hover:text-red-500 transition-colors p-2">🗑️</button>` : ''}
                     </div>
                     <p class="text-sm text-slate-600 leading-relaxed font-medium">${post.content}</p>
                 </div>
@@ -259,11 +284,9 @@
             let html = '';
             LEVELS.forEach(level => {
                 const isLocked = window.userXP < level.min;
-                html += `
-                    <div onclick="${isLocked ? '' : `window.changeAvatarStyle('${level.style}')`}" class="flex-shrink-0 cursor-pointer">
-                        <img src="https://api.dicebear.com/7.x/${level.style}/svg?seed=${currentUser}" 
-                             class="w-16 h-16 rounded-2xl bg-white p-1 border-2 ${window.userStyle === level.style ? 'border-emerald-500' : 'border-slate-100'} ${isLocked ? 'grayscale opacity-20' : ''}">
-                    </div>`;
+                html += `<div onclick="${isLocked ? '' : `window.changeAvatarStyle('${level.style}')`}" class="flex-shrink-0 cursor-pointer">
+                    <img src="https://api.dicebear.com/7.x/${level.style}/svg?seed=${currentUser}" class="w-16 h-16 rounded-2xl bg-white p-1 border-2 ${window.userStyle === level.style ? 'border-emerald-500' : 'border-slate-100'} ${isLocked ? 'grayscale opacity-20' : ''}">
+                </div>`;
             });
             document.getElementById('avatar-selection').innerHTML = html;
         }
@@ -274,17 +297,17 @@
             const exploreBtn = document.getElementById('nav-explore');
             const profileBtn = document.getElementById('nav-profile');
             if(tabId === 'explore') {
-                exploreBtn.className = "w-32 py-4 rounded-full bg-emerald-500 text-white flex justify-center transition-all shadow-lg";
+                exploreBtn.className = "w-32 py-4 rounded-full bg-emerald-500 text-white flex justify-center shadow-lg transition-all";
                 profileBtn.className = "w-32 py-4 rounded-full text-slate-300 flex justify-center transition-all";
             } else {
-                profileBtn.className = "w-32 py-4 rounded-full bg-emerald-500 text-white flex justify-center transition-all shadow-lg";
+                profileBtn.className = "w-32 py-4 rounded-full bg-emerald-500 text-white flex justify-center shadow-lg transition-all";
                 exploreBtn.className = "w-32 py-4 rounded-full text-slate-300 flex justify-center transition-all";
             }
         };
 
         function showToast(m) { 
             const t = document.getElementById('share-toast'); t.innerText = m; 
-            t.className = "fixed bottom-32 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-6 py-3 rounded-full font-bold text-xs uppercase z-[100] shadow-2xl"; 
+            t.className = "fixed bottom-32 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-6 py-3 rounded-full font-bold text-xs uppercase z-[100] shadow-xl"; 
             setTimeout(() => t.className = "hidden", 2000); 
         }
 
